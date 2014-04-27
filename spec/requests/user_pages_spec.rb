@@ -6,9 +6,19 @@ describe "User pages" do
 
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
+    let(:story) { FactoryGirl.create(:story, user: user) }
     before { visit user_path(user) }
 
     it { should have_content(user.username) }
+    it { should have_content(user.email) }
+    it { should have_content(user.bio) }
+    
+    describe "stories" do
+      it { should have_content("1 Story") }
+      it { should have_content(story.title) }
+      it { should have_link(story.title, href: story_path(story)) }
+      it { should have_content(story.body[0..49] + "...") }
+    end
    # it { should have_title(user.name) }
   end
   
