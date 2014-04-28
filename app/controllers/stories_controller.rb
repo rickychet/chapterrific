@@ -1,4 +1,6 @@
 class StoriesController < ApplicationController
+  before_action :signed_in_user
+
   def new
     @story = Story.new
   end
