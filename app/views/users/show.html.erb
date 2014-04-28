@@ -9,5 +9,7 @@
           <%= render @stories %>
         </ol>
         <%= will_paginate @stories %>
+		<% else %>
+		<h3>No Stories Yet</h3>
     <% end %>
 </div>

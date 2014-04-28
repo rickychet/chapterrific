@@ -6,18 +6,26 @@ describe "User pages" do
 
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
-    let(:story) { FactoryGirl.create(:story, user: user) }
-    before { visit user_path(user) }
+    before { sign_in user }
 
     it { should have_content(user.username) }
     it { should have_content(user.email) }
     it { should have_content(user.bio) }
+    it { should have_link("Create New Story", href: new_story_path) }
     
     describe "stories" do
+      describe "when no stories have been created" do
+        it { should have_content("No Stories Yet") }
+      end
+      
+      describe "when a story has been created" do
+      let!(:story) { FactoryGirl.create(:story, user: user) }
+      before { visit user_path(user)}
+      
       it { should have_content("1 Story") }
-      it { should have_content(story.title) }
       it { should have_link(story.title, href: story_path(story)) }
       it { should have_content(story.body[0..49] + "...") }
+    end
     end
    # it { should have_title(user.name) }
   end

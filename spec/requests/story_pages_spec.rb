@@ -6,6 +6,29 @@ describe "Story pages" do
   
   let(:user) { FactoryGirl.create(:user) }
   
+  describe "story creation" do
+    before do
+      sign_in user
+      visit new_story_path
+    end
+    
+    describe "with invalid information" do
+      it "should not create a story" do
+        expect { click_button "Create Story"}.not_to change(Story, :count)
+      end
+    end
+    
+    describe "with valid information" do
+    before do
+      fill_in "Title",    with: "The Raven"
+      fill_in "Body", with: "Once upon a midnight dreary, while I pondered weak and weary"
+    end
+    it "should create a story" do
+      expect { click_button "Create Story" }.to change(Story, :count).by(1)
+    end 
+  end
+end
+  
   describe "view story" do
     
     let(:story) { FactoryGirl.create(:story, user: user) }
