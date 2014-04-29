@@ -1,9 +1,12 @@
-<% provide(:title, 'Register')%>
-<h1>Register</h1>
+<% provide(:title, "Edit User Profile") %>
+<h1>Update your profile</h1>
+<h2>Remember to add a biography!</h2>
+
 <div>
   <div>
     <%= form_for(@user) do |f| %>
-	<%= render 'shared/error_messages' %>
+      <%= render 'shared/error_messages' %>
+
       <%= f.label :username %>
       <%= f.text_field :username %>
 
@@ -16,10 +19,12 @@
       <%= f.label :password %>
       <%= f.password_field :password %>
 
-      <%= f.label :password_confirmation, "Confirmation" %>
+      <%= f.label :password_confirmation, "Confirm Password" %>
       <%= f.password_field :password_confirmation %>
-	  <br>
-      <%= f.submit "Create my account" %>
+
+      <br>
+
+      <%= f.submit "Save changes"%>
     <% end %>
   </div>
 </div>
