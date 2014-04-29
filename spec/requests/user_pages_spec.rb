@@ -77,5 +77,23 @@ describe "User pages" do
 
       it { should have_content('error') }
     end
+
+    describe "with valid information" do
+      let(:new_username)  { "New Name" }
+      let(:new_email) { "new@example.com" }
+      let(:new_bio)   { "This is a new bio."}
+      before do
+        fill_in "Username",         with: new_username
+        fill_in "Email",            with: new_email
+        fill_in "Bio",              with: new_bio
+        fill_in "Password",         with: user.password
+        fill_in "Confirm Password", with: user.password
+        click_button "Save changes"
+      end
+
+      specify { expect(user.reload.username).to  eq new_username }
+      specify { expect(user.reload.email).to eq new_email }
+      specify { expect(user.reload.bio).to eq new_bio }
+    end
   end
 end
