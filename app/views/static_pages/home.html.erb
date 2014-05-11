@@ -1,3 +1,6 @@
-<h1>Home</h1>
+<h1>Welcome to Chapterrific</h1>
+<% if signed_in?%>
+<p><%= link_to "Create a Story Now", new_story_path %></p>
+<% else %>
 <p>New user? <%= link_to "Sign up now!", signup_path %></p>
-
+<% end %>
