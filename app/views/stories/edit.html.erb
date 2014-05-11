@@ -1,0 +1,9 @@
+<h1><%= @story.title %></h1><br>
+<textarea readonly class="storytext"><%= @story.body %></textarea>
+  	<div>
+	<%= form_for @story do |f| %>
+			<%= f.label :addition %>
+		   	<%= f.text_area :addition, class: "edittext" %><br>
+	       	<%= f.submit 'Add to Story' %>
+	    <% end -%>
+	</div>
