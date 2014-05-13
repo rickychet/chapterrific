@@ -1,7 +1,15 @@
 <h1><%= @story.title %></h1>
 <h2><%= @story.genre %></h2>
 <textarea readonly class="storytext"><%= @story.body %></textarea>
+<% if @story.lower_limit.nil? %>
+<p><%= "Lower limit: None" %></p>
+<% else %>
 <p><%= "Lower limit: " + @story.lower_limit.to_s %></p>
+<% end %>
+<% if @story.upper_limit.nil? %>
+<p><%= "Upper limit: None" %></p>
+<% else %>
 <p><%= "Upper limit: " + @story.upper_limit.to_s %></p>
+<% end %>
 <p><%= link_to "Add to this story", edit_story_path(@story)%></p>
 <p><%= link_to "Edit permissions", edit_story_path(@story)%></p>

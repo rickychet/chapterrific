@@ -7,17 +7,19 @@ class StoriesController < ApplicationController
   
   def create
     @story = current_user.stories.build(story_params)
-    unless @story.upper_limit.nil? && @story.lower_limit.nil?
+    unless @story.upper_limit.nil? or @story.lower_limit.nil?
       if @story.upper_limit < @story.lower_limit
         flash.now[:error] = 'Upper limit must be greater than the lower limit'
         render 'new'
-      else
-        @story.save
-        redirect_to user_path(current_user)
+        return
       end
+    end
+    if @story.save
+        redirect_to user_path(current_user)
     else
-      @story.save
-      redirect_to user_path(current_user)
+        flash.now[:error] = "Something went wrong. Make sure to enter a title,
+        put some content in the body, and make sure that limit values are integers."
+        render 'new'
     end
   end
   
