@@ -5,13 +5,6 @@ FactoryGirl.define do
     password "foobar"
     password_confirmation "foobar"
   end
-
-  factory :user2 do
-    username     "uzer2"
-    email    "uzer2@example.com"
-    password "foobar"
-    password_confirmation "foobar"
-  end
   
   factory :story do
     title "The Raven"
@@ -42,6 +35,8 @@ But the fact is I was napping, and so gently you came rapping,
 And so faintly you came tapping, tapping at my chamber door,
 That I scarce was sure I heard you' - here I opened wide the door; -
 Darkness there, and nothing more."
+    lower_limit 20
+    upper_limit 50
     user
   end
 

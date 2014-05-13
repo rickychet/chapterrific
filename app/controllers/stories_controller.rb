@@ -59,19 +59,20 @@ class StoriesController < ApplicationController
       if @addition.length < @story.lower_limit
         flash.now[:error] = "You must add " + (@story.lower_limit -  @addition.length).to_s + " more characters" 
         render 'edit'
-      end
-      if @story.upper_limit.nil? #upper limit not set and lower limit set
-        @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
-        @story.update_attributes(body: @newbody)
-        redirect_to @story
-      else #upper and lower limit are set
-        if @addition.length > @story.upper_limit
-          flash.now[:error] = "You must remove " + (@addition.length - @story.upper_limit).to_s + " characters"
-          render 'edit'
-        else
+      else
+        if @story.upper_limit.nil? #upper limit not set and lower limit set
           @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
           @story.update_attributes(body: @newbody)
           redirect_to @story
+        else #upper and lower limit are set
+          if @addition.length > @story.upper_limit
+            flash.now[:error] = "You must remove " + (@addition.length - @story.upper_limit).to_s + " characters"
+            render 'edit'
+          else
+            @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+            @story.update_attributes(body: @newbody)
+            redirect_to @story
+          end
         end
       end
     end

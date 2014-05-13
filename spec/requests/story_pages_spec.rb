@@ -83,26 +83,26 @@ describe "Story pages" do
       describe "after submitting edits" do
         before do
           visit edit_story_path(story)
-          fill_in "Addition", with: "New content"
+          fill_in "Addition", with: "New content New content New content"
           click_button "Add to Story"
         end
         it { should have_content(story.title) }
         it { should have_content(story.body) }
         it { should have_content(oldbody) }
-        it { should have_content('New content') }
+        it { should have_content('New content New content New content') }
       end
     end
 
     describe "change story content with limits" do
       let(:newuser) { FactoryGirl.create(:user) }
-      let(:limit_story) { FactoryGirl.create(:story, user: user) } #limits: lower-20 upper-50
+      let(:limit_story) { FactoryGirl.create(:story, user: newuser) } #limits: lower-20 upper-50
       let(:old_body) { limit_story.body }
       before do
         sign_in user
         visit edit_story_path(limit_story)
       end
 
-      subject { limit_story.body }
+      #subject { limit_story.body }
 
       describe "addition too short" do
         before do
