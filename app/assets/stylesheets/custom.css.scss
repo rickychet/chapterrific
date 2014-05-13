@@ -1,5 +1,15 @@
 @import "bootstrap";
 
+body {
+font-family: "Trebuchet MS", Helvetica, sans-serif;
+color: #006400;	
+background-color: beige;
+}
+
+header {
+
+}
+
 input, textarea, select, .uneditable-input {
   border: 1px solid #bbb;
   width: 30%;
