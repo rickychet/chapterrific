@@ -14,7 +14,7 @@ describe "Story pages" do
     
     describe "with invalid information" do
       it "should not create a story" do
-        expect { click_button "Create Story"}.not_to change(Story, :count)
+        expect { click_button "Create Story" }.not_to change(Story, :count)
       end
     end
     

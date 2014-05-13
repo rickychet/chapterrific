@@ -5,9 +5,18 @@
 		   <%= f.label :title %>
 		   <%= f.text_field :title %>
 
+       <%= f.label :genre %>
+       <%= f.text_field :genre %>
+
 		   <%= f.label :body %>
 		   <%= f.text_field :body %>
 
-	       <%= f.submit 'Create Story' %>
-	    <% end -%>
+       <%= f.label :lower_limit %>
+       <%= f.text_field :lower_limit %>
+
+       <%= f.label :upper_limit %>
+       <%= f.text_field :upper_limit %>       
+
+	     <%= f.submit 'Create Story' %>
+	    <% end %>
   </div>

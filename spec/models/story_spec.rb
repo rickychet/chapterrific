@@ -10,7 +10,9 @@ describe Story do
   it { should respond_to(:title) }
   it { should respond_to(:body) }
   it { should respond_to(:genre) }
-  its(:user) { should eq user}
+  it { should respond_to(:upper_limit) }
+  it { should respond_to(:lower_limit) }
+  its(:user) { should eq user }
   
   it { should be_valid }
   

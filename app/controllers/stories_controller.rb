@@ -7,8 +7,15 @@ class StoriesController < ApplicationController
   
   def create
     @story = current_user.stories.build(story_params)
-    @story.save
-    redirect_to user_path(current_user)
+    unless @story.upper_limit.nil? && @story.lower_limit.nil?
+      if @story.upper_limit < @story.lower_limit
+        flash.now[:error] = 'Upper limit must be greater than the lower limit'
+        render 'new'
+      else
+        @story.save
+        redirect_to user_path(current_user)
+      end
+    end
   end
   
   def edit
@@ -18,15 +25,28 @@ class StoriesController < ApplicationController
   def update
     @story = Story.find(params[:id]) 
     @addition = story_params[:addition]
-    if @addition.length>0
-      @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
-      @story.update_attributes(body: @newbody)
-      redirect_to @story
+    if @story.lower_limit.nil? && @story.upper_limit.nil?
+      if @addition.length>0
+        @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+        @story.update_attributes(body: @newbody)
+        redirect_to @story
+      else
+        flash.now[:error] = 'Please add some content.'
+        render 'edit'
+      end
     else
-      flash.now[:error] = 'Please add some content.'
-      render 'edit'
+      if @addition.length < @story.lower_limit
+        flash.now[:error] = "You must add " + (@story.lower_limit -  @addition.length) + " more characters" 
+        render 'edit'
+      elsif @addition.length >@story.upper_limit
+        flash.now[:error] = "You must remove " + (@story.upper_limit -  @addition.length) + " characters"
+        render 'edit'
+      else
+        @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+        @story.update_attributes(body: @newbody)
+        redirect_to @story
+      end
     end
-    
   end
   
   def show
@@ -36,6 +56,6 @@ class StoriesController < ApplicationController
   private 
   
   def story_params
-    params.require(:story).permit(:title, :body, :addition)
+    params.require(:story).permit(:title, :body, :addition, :lower_limit, :upper_limit)
   end
 end
