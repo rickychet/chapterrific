@@ -1,5 +1,6 @@
 class StoriesController < ApplicationController
   before_action :signed_in_user
+  before_action :correct_user, only: :destroy
 
   def new
     @story = Story.new
@@ -13,6 +14,8 @@ class StoriesController < ApplicationController
     unless @story.upper_limit.nil? or @story.lower_limit.nil?
       if @story.upper_limit < @story.lower_limit
         flash.now[:error] = 'Upper limit must be greater than the lower limit'
+        render 'new'
+        return
       end
     end
     if @story.save
@@ -79,9 +82,19 @@ class StoriesController < ApplicationController
     @story = Story.find(params[:id])
   end
   
+  def destroy
+    @story.destroy
+    redirect_to user_path(current_user)
+  end
+  
   private 
   
   def story_params
     params.require(:story).permit(:title, :genre, :body, :addition, :lower_limit, :upper_limit)
+  end
+  
+  def correct_user
+    @story = current_user.stories.find_by(id: params[:id])
+    redirect_to root_url if @story.nil?
   end
 end

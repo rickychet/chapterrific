@@ -51,6 +51,19 @@ end
     
     it { should have_content(story.title) }
     it { should have_content(story.body) }
+    describe "delete link for correct user" do
+    it { should have_link("Delete")}
+    end
+    
+    describe "delete link for incorrect user" do
+      let(:user2) { FactoryGirl.create(:user) }
+      before do
+        click_link("Sign out")
+        sign_in user2
+        visit story_path(story)
+      end
+      it {should_not have_link("Delete")}
+    end
     
     describe "change story content" do
       let(:oldbody) { story.body }
