@@ -16,6 +16,20 @@ describe "Story pages" do
       it "should not create a story" do
         expect { click_button "Create Story" }.not_to change(Story, :count)
       end
+
+      describe "with a smaller upper limit" do
+        before do
+          visit new_story_path
+          fill_in "Title",    with: "The Raven"
+          fill_in "Body", with: "Once upon a midnight dreary, while I pondered weak and weary"
+          fill_in "Upper limit", with: "10"
+          fill_in "Lower limit", with: "100"
+        end
+
+        it "should not create a story" do
+          expect { click_button "Create Story" }.not_to change(Story, :count)
+        end
+      end
     end
     
     describe "with valid information" do
