@@ -1,4 +1,7 @@
 <h1><%= @story.title %></h1>
+<h2><%= @story.genre %></h2>
 <textarea readonly class="storytext"><%= @story.body %></textarea>
+<p><%= "Lower limit: " + @story.lower_limit.to_s %></p>
+<p><%= "Upper limit: " + @story.upper_limit.to_s %></p>
 <p><%= link_to "Add to this story", edit_story_path(@story)%></p>
 <p><%= link_to "Edit permissions", edit_story_path(@story)%></p>

@@ -15,6 +15,9 @@ class StoriesController < ApplicationController
         @story.save
         redirect_to user_path(current_user)
       end
+    else
+      @story.save
+      redirect_to user_path(current_user)
     end
   end
   
@@ -56,6 +59,6 @@ class StoriesController < ApplicationController
   private 
   
   def story_params
-    params.require(:story).permit(:title, :body, :addition, :lower_limit, :upper_limit)
+    params.require(:story).permit(:title, :genre, :body, :addition, :lower_limit, :upper_limit)
   end
 end
