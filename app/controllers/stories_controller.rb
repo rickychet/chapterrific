@@ -28,26 +28,49 @@ class StoriesController < ApplicationController
   def update
     @story = Story.find(params[:id]) 
     @addition = story_params[:addition]
-    if @story.lower_limit.nil? && @story.upper_limit.nil?
-      if @addition.length>0
-        @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
-        @story.update_attributes(body: @newbody)
-        redirect_to @story
-      else
-        flash.now[:error] = 'Please add some content.'
-        render 'edit'
+
+    if @story.lower_limit.nil? or @story.lower_limit == 0
+      if @story.upper_limit.nil? or @story.upper_limit == 0
+        if @addition.length>0
+          @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+          @story.update_attributes(body: @newbody)
+          redirect_to @story
+        else
+          flash.now[:error] = 'Please add some content.'
+          render 'edit'
+        end
+      else #upper limit set
+        if @addition.length > @story.upper_limit
+          flash.now[:error] = 'You tried to add too much'
+          render 'edit'
+        else
+          @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+          @story.update_attributes(body: @newbody)
+          redirect_to @story
+        end
       end
     else
-      if @addition.length < @story.lower_limit
-        flash.now[:error] = "You must add " + (@story.lower_limit -  @addition.length) + " more characters" 
-        render 'edit'
-      elsif @addition.length >@story.upper_limit
-        flash.now[:error] = "You must remove " + (@story.upper_limit -  @addition.length) + " characters"
-        render 'edit'
+      if @story.upper_limit.nil? or @story.upper_limit == 0
+        if @addition.length < @story.lower_limit
+          flash.now[:error] = 'You did not add enough'
+          render 'edit'
+        else
+          @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+          @story.update_attributes(body: @newbody)
+          redirect_to @story
+        end
       else
-        @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
-        @story.update_attributes(body: @newbody)
-        redirect_to @story
+         if @addition.length < @story.lower_limit
+            flash.now[:error] = 'You did not add enough' 
+            render 'edit'
+         elsif @addition.length >@story.upper_limit
+            flash.now[:error] = 'You tried to add too much'
+            render 'edit'
+         else
+            @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+            @story.update_attributes(body: @newbody)
+            redirect_to @story
+         end
       end
     end
   end
