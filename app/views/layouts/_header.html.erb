@@ -3,23 +3,19 @@
     <div class="container">
       <nav>
 		  			  <img src ='http://designmoo.com/wp-content/uploads/2011/01/openbook1.gif' width=15% height=15%)/>
-        <ul class="nav pull-right">
+		<ul>
+			<% if signed_in? %>
+			<li><%= link_to "Settings", edit_user_path(current_user) %></li>
+            <li>
+              <%= link_to "Sign out", signout_path, method: "delete" %>
+            </li> 
+			<% end %>
+		</ul>
+        <ul>
           <li><%= link_to "Home", root_path %></li>
           <% if signed_in? %>
             <li><%= link_to "Users", users_path %></li>
-            <li id="fat-menu" class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                Account <b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu">
                 <li><%= link_to "Profile", current_user %></li>
-                <li><%= link_to "Settings", edit_user_path(current_user) %></li>
-                <li class="divider"></li>
-                <li>
-                  <%= link_to "Sign out", signout_path, method: "delete" %>
-                </li>
-              </ul>
-            </li>
           <% else %>
             <li><%= link_to "Sign in", signin_path %></li>
           <% end %>
