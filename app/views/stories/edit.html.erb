@@ -3,7 +3,14 @@
   	<div>
 	<%= form_for @story do |f| %>
 			<%= f.label :addition %>
-		   	<%= f.text_area :addition, class: "edittext" %><br>
+		   	<%= f.text_area :addition, class: "edittext", onkeyup: "showCharNumber(this)" %><br>
+			<div id="chars">Characters used: 0</div>
 	       	<%= f.submit 'Add to Story', class: "submit-btn" %>
 	    <% end -%>
+	    <script>
+	    function showCharNumber(txt) {
+	  	  var length = txt.value.length
+	  	  $('#chars').text("Characters used: " + length)
+	    }
+	    </script>
 	</div>
