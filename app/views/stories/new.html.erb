@@ -3,11 +3,11 @@
   <div>
 	<%= form_for(@story) do |f| %>
 		   <%= f.label :title %>
-		   <%= f.text_field :title %>
+		   <%= f.text_area :title %>
 
 		   <%= f.label :body %>
-		   <%= f.text_field :body %>
+		   <%= f.text_area :body, class: "edittext" %><br>
 
-	       <%= f.submit 'Create Story' %>
+	       <%= f.submit 'Create Story', class: "submit-btn" %>
 	    <% end -%>
   </div>
