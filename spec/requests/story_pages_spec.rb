@@ -37,13 +37,13 @@ end
       visit story_path(story)
     end
     
-    it {  should have_content(story.title) }
+    it { should have_content(story.title) }
     it { should have_content(story.body) }
     
     describe "change story content" do
       let(:oldbody) { story.body }
       describe "before submitting edits" do
-        it {  should have_content(story.title) }
+        it { should have_content(story.title) }
         it { should have_content(story.body) }
       end
       
@@ -53,7 +53,7 @@ end
         fill_in "Addition", with: "New content"
         click_button "Add to Story"
       end
-      it {  should have_content(story.title) }
+      it { should have_content(story.title) }
       it { should have_content(story.body) }
       it { should have_content(oldbody) }
     end
