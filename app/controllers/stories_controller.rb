@@ -39,10 +39,10 @@ class StoriesController < ApplicationController
       end
     else
       if @addition.length < @story.lower_limit
-        flash.now[:error] = "You must add " + (@story.lower_limit -  @addition.length) + " more characters" 
+        flash.now[:error] = "You must add " + (@story.lower_limit -  @addition.length).to_s + " more characters" 
         render 'edit'
       elsif @addition.length >@story.upper_limit
-        flash.now[:error] = "You must remove " + (@story.upper_limit -  @addition.length) + " characters"
+        flash.now[:error] = "You must remove " + (@addition.length - @story.upper_limit).to_s + " characters"
         render 'edit'
       else
         @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
