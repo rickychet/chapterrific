@@ -33,17 +33,18 @@ describe "Story pages" do
     end
     
     describe "with valid information" do
-    before do
-      fill_in "Title",    with: "The Raven"
-      fill_in "Body", with: "Once upon a midnight dreary, while I pondered weak and weary" 
-    end
-    it "should create a story with no limits specified" do
-      expect { click_button "Create Story" }.to change(Story, :count).by(1)
-    end 
-    it "should create a story with valid limits" do
+      before do
+        fill_in "Title",    with: "The Raven"
+        fill_in "Body", with: "Once upon a midnight dreary, while I pondered weak and weary" 
+      end
+      it "should create a story with no limits specified" do
+        expect { click_button "Create Story" }.to change(Story, :count).by(1)
+      end 
+      it "should create a story with valid limits" do
         fill_in "Lower limit", with: "10"
         fill_in "Upper limit", with: "20"
-      expect { click_button "Create Story" }.to change(Story, :count).by(1)
+        expect { click_button "Create Story" }.to change(Story, :count).by(1)
+      end
     end
   end
   
@@ -105,6 +106,7 @@ describe "Story pages" do
 
       describe "addition too short" do
         before do
+          visit edit_story_path(limit_story)
           fill_in "Addition", with: "Too short"
           click_button "Add to Story"
         end
@@ -114,7 +116,7 @@ describe "Story pages" do
 
       describe "addition too long" do
         before do
-          visit story_path(limit_story)
+          visit edit_story_path(limit_story)
           fill_in "Addition", with: "This string is too long, which means it shouldn't be added to the story"
           click_button "Add to Story"
         end
@@ -124,7 +126,7 @@ describe "Story pages" do
 
       describe "addition just right" do
         before do
-          visit story_path(limit_story)
+          visit edit_story_path(limit_story)
           fill_in "Addition", with: "This string is the perfect length"
           click_button "Add to Story"
         end
