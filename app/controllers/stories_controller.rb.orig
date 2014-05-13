@@ -50,12 +50,24 @@ class StoriesController < ApplicationController
         end
       end
     else
+<<<<<<< HEAD
+      if @story.upper_limit.nil? or @story.upper_limit == 0
+        if @addition.length < @story.lower_limit
+          flash.now[:error] = 'You did not add enough'
+          render 'edit'
+        else
+          @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+          @story.update_attributes(body: @newbody)
+          redirect_to @story
+        end
+=======
       if @addition.length < @story.lower_limit
         flash.now[:error] = "You must add " + (@story.lower_limit -  @addition.length).to_s + " more characters" 
         render 'edit'
       elsif @addition.length >@story.upper_limit
         flash.now[:error] = "You must remove " + (@addition.length - @story.upper_limit).to_s + " characters"
         render 'edit'
+>>>>>>> 3b821c20ed345a21b458cf9769a0266744281281
       else
          if @addition.length < @story.lower_limit
             flash.now[:error] = 'You did not add enough' 
