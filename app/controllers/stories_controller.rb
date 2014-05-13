@@ -7,11 +7,12 @@ class StoriesController < ApplicationController
   
   def create
     @story = current_user.stories.build(story_params)
+    if @story.genre.empty?
+      @story.update_attributes(genre: "None")
+    end
     unless @story.upper_limit.nil? or @story.lower_limit.nil?
       if @story.upper_limit < @story.lower_limit
         flash.now[:error] = 'Upper limit must be greater than the lower limit'
-        render 'new'
-        return
       end
     end
     if @story.save

@@ -13,7 +13,14 @@ describe "Story pages" do
     end
     
     describe "with invalid information" do
-      it "should not create a story" do
+      it "should not create a story with empty content" do
+        expect { click_button "Create Story" }.not_to change(Story, :count)
+      end
+      it "should not create a story with invalid limits" do
+        fill_in "Title",    with: "The Raven"
+        fill_in "Body", with: "Once upon a midnight dreary, while I pondered weak and weary"
+        fill_in "Lower limit", with: "20"
+        fill_in "Upper limit", with: "10"
         expect { click_button "Create Story" }.not_to change(Story, :count)
       end
     end
@@ -21,11 +28,16 @@ describe "Story pages" do
     describe "with valid information" do
     before do
       fill_in "Title",    with: "The Raven"
-      fill_in "Body", with: "Once upon a midnight dreary, while I pondered weak and weary"
+      fill_in "Body", with: "Once upon a midnight dreary, while I pondered weak and weary" 
     end
-    it "should create a story" do
+    it "should create a story with no limits specified" do
       expect { click_button "Create Story" }.to change(Story, :count).by(1)
     end 
+    it "should create a story with valid limits" do
+        fill_in "Lower limit", with: "10"
+        fill_in "Upper limit", with: "20"
+      expect { click_button "Create Story" }.to change(Story, :count).by(1)
+    end
   end
 end
   
