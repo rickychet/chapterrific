@@ -35,8 +35,8 @@ class StoriesController < ApplicationController
     @story = Story.find(params[:id]) 
     @addition = story_params[:addition]
 
-    if @story.lower_limit.nil? or @story.lower_limit == 0
-      if @story.upper_limit.nil? or @story.upper_limit == 0
+    if @story.lower_limit.nil? or @story.lower_limit == 0 #lower limit not set
+      if @story.upper_limit.nil? or @story.upper_limit == 0 #both limits are not set
         if @addition.length>0
           @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
           @story.update_attributes(body: @newbody)
@@ -45,7 +45,7 @@ class StoriesController < ApplicationController
           flash.now[:error] = 'Please add some content.'
           render 'edit'
         end
-      else #upper limit set
+      else #upper limit set and lower limit not set
         if @addition.length > @story.upper_limit
           flash.now[:error] = 'You tried to add too much'
           render 'edit'
@@ -55,25 +55,24 @@ class StoriesController < ApplicationController
           redirect_to @story
         end
       end
-    else
+    else #lower limit is set
       if @addition.length < @story.lower_limit
         flash.now[:error] = "You must add " + (@story.lower_limit -  @addition.length).to_s + " more characters" 
         render 'edit'
-      elsif @addition.length >@story.upper_limit
-        flash.now[:error] = "You must remove " + (@addition.length - @story.upper_limit).to_s + " characters"
-        render 'edit'
-      else
-         if @addition.length < @story.lower_limit
-            flash.now[:error] = 'You did not add enough' 
-            render 'edit'
-         elsif @addition.length >@story.upper_limit
-            flash.now[:error] = 'You tried to add too much'
-            render 'edit'
-         else
-            @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
-            @story.update_attributes(body: @newbody)
-            redirect_to @story
-         end
+      end
+      if @story.upper_limit.nil? #upper limit not set and lower limit set
+        @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+        @story.update_attributes(body: @newbody)
+        redirect_to @story
+      else #upper and lower limit are set
+        if @addition.length > @story.upper_limit
+          flash.now[:error] = "You must remove " + (@addition.length - @story.upper_limit).to_s + " characters"
+          render 'edit'
+        else
+          @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+          @story.update_attributes(body: @newbody)
+          redirect_to @story
+        end
       end
     end
   end
