@@ -36,6 +36,7 @@ describe "Static Pages" do
   end
 
   describe "Help page" do
+    before {visit help_path}
     it {should have_content('The help page!')}
   end
 end
