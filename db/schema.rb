@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140513025542) do
+ActiveRecord::Schema.define(version: 20140514003224) do
 
   create_table "stories", force: true do |t|
     t.string   "title"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20140513025542) do
     t.text     "addition"
     t.integer  "lower_limit"
     t.integer  "upper_limit"
+    t.integer  "editor_id"
   end
 
   create_table "users", force: true do |t|
