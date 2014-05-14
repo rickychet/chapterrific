@@ -159,7 +159,7 @@ describe "Story pages" do
         visit edit_story_path(story)
       end
 
-      it { should_not have_content("This document is currently being edited by another user.") }
+      it { should have_content("Addition") }
 
       before do
         fill_in "Addition", with: "This string is the perfect length"
@@ -169,7 +169,7 @@ describe "Story pages" do
         visit edit_story_path(story)
       end
 
-      it { should_not have_content("This document is currently being edited by another user.") }
+      it { should have_content("Addition") }
     end
   end
 end

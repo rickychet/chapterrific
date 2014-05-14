@@ -33,6 +33,10 @@ class StoriesController < ApplicationController
     if @story.editor_id.nil?
       @story.update_attributes(editor_id: @user.id)
     end
+    if @user.id != @story.editor_id
+      flash.now[:error] = "This document is currently being edited by another user. Please wait until that user finishes editing."
+      redirect_to @story
+    end
   end
   
   def update
