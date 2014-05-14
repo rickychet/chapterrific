@@ -29,49 +29,60 @@ class StoriesController < ApplicationController
   
   def edit
     @story = Story.find(params[:id])
+    @user = current_user
+    if @story.editor_id.nil?
+      @story.update_attributes(editor_id: @user.id)
+    end
   end
   
   def update
     @story = Story.find(params[:id]) 
     @addition = story_params[:addition]
+    @editor = User.find(@story.editor_id)
+    @new_editor = current_user
 
-    if @story.lower_limit.nil? or @story.lower_limit == 0 #lower limit not set
-      if @story.upper_limit.nil? or @story.upper_limit == 0 #both limits are not set
-        if @addition.length>0
-          @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
-          @story.update_attributes(body: @newbody)
-          redirect_to @story
-        else
-          flash.now[:error] = 'Please add some content.'
-          render 'edit'
-        end
-      else #upper limit set and lower limit not set
-        if @addition.length > @story.upper_limit
-          flash.now[:error] = 'You tried to add too much'
-          render 'edit'
-        else
-          @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
-          @story.update_attributes(body: @newbody)
-          redirect_to @story
-        end
-      end
-    else #lower limit is set
-      if @addition.length < @story.lower_limit
-        flash.now[:error] = "You must add " + (@story.lower_limit -  @addition.length).to_s + " more characters" 
-        render 'edit'
-      else
-        if @story.upper_limit.nil? #upper limit not set and lower limit set
-          @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
-          @story.update_attributes(body: @newbody)
-          redirect_to @story
-        else #upper and lower limit are set
+    if @new_editor != @editor
+      flash.now[:error] = "This document is currently being edited by another user. Please wait until that user finishes editing."
+      redirect_to @story
+    else
+      if @story.lower_limit.nil? or @story.lower_limit == 0 #lower limit not set
+        if @story.upper_limit.nil? or @story.upper_limit == 0 #both limits are not set
+          if @addition.length>0
+            @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+            @story.update_attributes(body: @newbody, editor_id: nil)
+            redirect_to @story
+          else
+            flash.now[:error] = 'Please add some content.'
+            render 'edit'
+          end
+        else #upper limit set and lower limit not set
           if @addition.length > @story.upper_limit
-            flash.now[:error] = "You must remove " + (@addition.length - @story.upper_limit).to_s + " characters"
+            flash.now[:error] = 'You tried to add too much'
             render 'edit'
           else
             @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
-            @story.update_attributes(body: @newbody)
+            @story.update_attributes(body: @newbody, editor_id: nil)
             redirect_to @story
+          end
+        end
+      else #lower limit is set
+        if @addition.length < @story.lower_limit
+          flash.now[:error] = "You must add " + (@story.lower_limit -  @addition.length).to_s + " more characters" 
+          render 'edit'
+        else
+          if @story.upper_limit.nil? #upper limit not set and lower limit set
+            @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+            @story.update_attributes(body: @newbody, editor_id: nil)
+            redirect_to @story
+          else #upper and lower limit are set
+            if @addition.length > @story.upper_limit
+              flash.now[:error] = "You must remove " + (@addition.length - @story.upper_limit).to_s + " characters"
+              render 'edit'
+            else
+              @newbody = @story[:body] + "\n\n" + current_user.username + ":\n" + @addition
+              @story.update_attributes(body: @newbody, editor_id: nil)
+              redirect_to @story
+            end
           end
         end
       end
@@ -90,7 +101,7 @@ class StoriesController < ApplicationController
   private 
   
   def story_params
-    params.require(:story).permit(:title, :genre, :body, :addition, :lower_limit, :upper_limit)
+    params.require(:story).permit(:title, :genre, :body, :addition, :lower_limit, :upper_limit, :editor_id)
   end
   
   def correct_user

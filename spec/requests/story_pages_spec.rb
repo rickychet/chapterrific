@@ -58,8 +58,9 @@ describe "Story pages" do
     
     it { should have_content(story.title) }
     it { should have_content(story.body) }
+
     describe "delete link for correct user" do
-    it { should have_link("Delete")}
+      it { should have_link("Delete")}
     end
     
     describe "delete link for incorrect user" do
@@ -133,6 +134,42 @@ describe "Story pages" do
 
         it { should have_content("This string is the perfect length") }
       end
+    end
+
+    describe "two people trying to edit" do
+      let(:first_user)   { FactoryGirl.create(:user) }
+      let(:story)        { FactoryGirl.create(:story, user: first_user) }
+      before do
+        sign_in first_user
+        visit edit_story_path(story)
+        sign_out first_user
+      end
+
+      let(:second_user) { FactoryGirl.create(:user) }
+      before do
+        sign_in second_user
+        visit edit_story_path(story)
+      end
+
+      it { should have_link(edit_story_path(story)) }
+
+      before do
+        sign_out second_user
+        sign_in first_user
+        visit edit_story_path(story)
+      end
+
+      it { should_not have_content("This document is currently being edited by another user.") }
+
+      before do
+        fill_in "Addition", with: "This string is the perfect length"
+        click_button "Add to Story"
+        sign_out first_user
+        sign_in second_user
+        visit edit_story_path(story)
+      end
+
+      it { should_not have_content("This document is currently being edited by another user.") }
     end
   end
 end

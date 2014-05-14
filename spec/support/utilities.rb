@@ -13,3 +13,8 @@ def sign_in(user, options={})
     click_button "Sign in"
   end
 end
+
+def sign_out(user, options={})
+  user.update_attribute(:remember_token, User.hash(User.new_remember_token))
+  cookies.delete(:remember_token)
+    end

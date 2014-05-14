@@ -36,7 +36,11 @@ describe "Static Pages" do
   end
 
   describe "Help page" do
+<<<<<<< HEAD
+    before {visit help_path}
+=======
     before { visit help_path }
+>>>>>>> one-editor
     it {should have_content('The help page!')}
   end
 end
