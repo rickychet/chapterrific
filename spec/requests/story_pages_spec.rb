@@ -138,25 +138,25 @@ describe "Story pages" do
 
     describe "two people trying to edit" do
       let(:first_user)   { FactoryGirl.create(:user) }
-      let(:story)        { FactoryGirl.create(:story, user: first_user) }
+      let(:story1)        { FactoryGirl.create(:story, user: first_user) }
       before do
         sign_in first_user
-        visit edit_story_path(story)
+        visit edit_story_path(story1)
         sign_out first_user
       end
 
       let(:second_user) { FactoryGirl.create(:user) }
       before do
         sign_in second_user
-        visit edit_story_path(story)
+        visit edit_story_path(story1)
       end
 
-      it { should have_link(edit_story_path(story)) }
+      it { should_not have_content("Additions") }
 
       before do
         sign_out second_user
         sign_in first_user
-        visit edit_story_path(story)
+        visit edit_story_path(story1)
       end
 
       it { should have_content("Addition") }
@@ -166,7 +166,7 @@ describe "Story pages" do
         click_button "Add to Story"
         sign_out first_user
         sign_in second_user
-        visit edit_story_path(story)
+        visit edit_story_path(story1)
       end
 
       it { should have_content("Addition") }
