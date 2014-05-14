@@ -1,7 +1,9 @@
 <h1>Username: <%= @user.username %></h1><br> 
 <p>Email: <%= @user.email %></p>
 <p>Bio: <%= @user.bio %></p>
+<% if current_user?(@user)%>
 <p><%= link_to "Create New Story", new_story_path %></p>
+<% end %>
 <div>
     <% if @user.stories.any? %>
         <h3><%= pluralize(@user.stories.count, "Story") %> </h3>
