@@ -6,6 +6,8 @@ Created by: Nicholas Etzel and Richard Barker
 -------------------
 This is a Ruby on Rails web application that allows users to create stories and allows other users to edit those stories.
 
-the creator of the story can set limits as to how much people can add. They can also delete the story if they so choose.
+The creator of the story can set limits as to how much people can add. They can also delete the story if they so choose.
+
+Only one user can edit a story at a time.
 
 
