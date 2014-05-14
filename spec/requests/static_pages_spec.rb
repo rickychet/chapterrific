@@ -34,4 +34,8 @@ describe "Static Pages" do
       it { should_not have_link('Sign up now!', signup_path) } 
     end
   end
+
+  describe "Help page" do
+    it {should have_content('The help page!')}
+  end
 end
